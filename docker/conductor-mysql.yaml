@@ -1,0 +1,23 @@
+# Docker compose for netflix conductor + elasticsearch
+version: '2'
+services:
+  conductor-server:
+    environment:
+      - CONFIG_PROP=config-mysql.properties
+    image: hados99/conductor-server:1.13.0-SNAPSHOT
+    ports:
+      - 8080:8080
+    links:
+      - elasticsearch:es
+
+  conductor-ui:
+    environment:
+      - WF_SERVER=http://10.10.210.239:8080/api/
+    image: hados99/conductor-ui:1.13.0-SNAPSHOT
+    ports:
+      - 5000:5000
+    links:
+      - conductor-server
+
+  elasticsearch:
+    image: elasticsearch:2.4
